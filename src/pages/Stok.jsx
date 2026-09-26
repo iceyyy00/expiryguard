@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
 import { formatTanggal, tanggalLokal, hariIniISO, totalStok } from '../helpers'
-import { Pill, Modal, EmptyState } from '../components/ui'
+import { Modal, EmptyState } from '../components/ui'
 import { Icon } from '../components/icons'
 
-export default function Stok({ settings }) {
+export default function Stok() {
   const produk = useLiveQuery(() => db.produk.toArray(), [])
   const batches = useLiveQuery(() => db.batch.toArray(), [])
   const [cari, setCari] = useState('')
@@ -38,7 +38,15 @@ export default function Stok({ settings }) {
           <div className="page-title">Stok</div>
           <div className="page-sub">Total stok per produk beserta rincian batch (FEFO)</div>
         </div>
-        <div className="page-actions">
+        <div className="page-actions" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <div className="searchbar" style={{ minWidth: 220 }}>
+            <input
+              className="inp"
+              placeholder="Cari produk / SKU..."
+              value={cari}
+              onChange={(e) => setCari(e.target.value)}
+            />
+          </div>
           <button className="btn primary" onClick={() => setShowTambah(true)}>
             <Icon name="plus" size={16} /> Tambah Batch
           </button>

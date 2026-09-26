@@ -5,13 +5,12 @@ import {
   formatRupiah,
   formatTanggal,
   hitungSisaHari,
-  getStatusExp,
   statusStok,
   totalStok
 } from '../helpers'
-import { StatCard, Pill, BarChart, EmptyState } from '../components/ui'
+import { StatCard, BarChart, EmptyState } from '../components/ui'
 import { Icon } from '../components/icons'
-import { useSettings, useAlerts } from '../App'
+import { useSettings, useAlerts } from '../hooks'
 
 export default function Dashboard({ go }) {
   const settings = useSettings()

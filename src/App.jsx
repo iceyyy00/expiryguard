@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useLiveQuery } from 'dexie-react-hooks'
-import { db } from './db'
 import { seedData } from './seed'
 import { useSession, sessionStore } from './session'
-import { getStatusExp, DEFAULT_SETTINGS } from './helpers'
+import { useSettings, useAlerts } from './hooks'
 import { Icon } from './components/icons'
 import Dashboard from './pages/Dashboard'
 import Kasir from './pages/Kasir'
@@ -18,7 +16,7 @@ import Login from './pages/Login'
 // ---- Inisialisasi seed sekali saat app pertama dibuka ----
 seedData()
 
-export const halamanKasir = ['dashboard', 'kasir', 'peringatan', 'riwayat']
+const halamanKasir = ['dashboard', 'kasir', 'peringatan', 'riwayat']
 
 const MENU = [
   { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
@@ -30,29 +28,6 @@ const MENU = [
   { id: 'laporan', label: 'Laporan', icon: 'chart' },
   { id: 'pengaturan', label: 'Pengaturan', icon: 'gear' }
 ]
-
-export function useSettings() {
-  const rows = useLiveQuery(() => db.pengaturan.toArray(), [])
-  return useMemo(() => {
-    const s = { ...DEFAULT_SETTINGS }
-    for (const r of rows || []) s[r.key] = r.value
-    return s
-  }, [rows])
-}
-
-// Jumlah batch yang "perlu perhatian" (untuk lonceng & banner)
-export function useAlerts() {
-  const settings = useSettings()
-  const batches = useLiveQuery(() => db.batch.toArray(), [])
-  return useMemo(() => {
-    const aktif = (batches || []).filter((b) => (Number(b.stok) || 0) > 0)
-    const list = aktif
-      .map((b) => ({ ...b, status: getStatusExp(b.tanggalExp, settings) }))
-      .filter((b) => b.status.prioritas > 0)
-      .sort((a, b) => b.status.prioritas - a.status.prioritas || (a.tanggalExp || '').localeCompare(b.tanggalExp || ''))
-    return { list, count: list.length }
-  }, [batches, settings])
-}
 
 function App() {
   const [page, setPage] = useState('dashboard')
@@ -158,8 +133,8 @@ function App() {
           )}
 
           {page === 'dashboard' && <Dashboard go={go} />}
-          {page === 'kasir' && <Kasir settings={settings} />}
-          {page === 'produk' && <Produk settings={settings} />}
+          {page === 'kasir' && <Kasir settings={settings} user={user} go={go} />}
+          {page === 'produk' && <Produk settings={settings} user={user} go={go} />}
           {page === 'peringatan' && <Peringatan settings={settings} />}
           {page === 'stok' && <Stok settings={settings} />}
           {page === 'riwayat' && <Riwayat />}

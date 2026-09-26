@@ -11,7 +11,7 @@ const PERIODE = [
   { id: '30', label: '30 Hari' }
 ]
 
-export default function Laporan({ settings }) {
+export default function Laporan() {
   const [periode, setPeriode] = useState('7')
   const transaksi = useLiveQuery(() => db.transaksi.toArray(), [])
   const riwayat = useLiveQuery(() => db.riwayatStok.toArray(), [])

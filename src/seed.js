@@ -1,5 +1,5 @@
 import { db } from './db'
-import { offsetHariISO, tanggalLokal, kodeTransaksi, DEFAULT_SETTINGS } from './helpers'
+import { tanggalLokal, kodeTransaksi, DEFAULT_SETTINGS } from './helpers'
 
 // ============================================================
 // Seed data demo — hanya dijalankan sekali saat database kosong.

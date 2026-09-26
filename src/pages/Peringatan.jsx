@@ -3,9 +3,9 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
 import { formatTanggal, hitungSisaHari } from '../helpers'
 import { Pill, EmptyState } from '../components/ui'
-import { useAlerts } from '../App'
+import { useAlerts } from '../hooks'
 
-export default function Peringatan({ settings }) {
+export default function Peringatan() {
   const { list } = useAlerts()
   const produk = useLiveQuery(() => db.produk.toArray(), [])
 
